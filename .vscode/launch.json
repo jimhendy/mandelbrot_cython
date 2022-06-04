@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "name": "Pure Python",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "args": [
+                "pure"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}
