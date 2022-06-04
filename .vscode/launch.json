@@ -6,7 +6,37 @@
             "request": "launch",
             "program": "main.py",
             "args": [
-                "pure"
+                "pure",
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Pure Python (Small)",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "args": [
+                "pure",
+                "--pixels_x",
+                "5",
+                "--pixels_y",
+                "5"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Pure Python (Large)",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "args": [
+                "pure",
+                "--pixels_x",
+                "5_000",
+                "--pixels_y",
+                "5_000",
             ],
             "console": "integratedTerminal",
             "justMyCode": true

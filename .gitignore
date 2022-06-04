@@ -1,0 +1,5 @@
+logs
+output
+.vscode
+*.ipynb
+**.pyc

@@ -1,3 +1,7 @@
 black
 isort
+loguru
+matplotlib
+numpy
 pre-commit
+pylint
