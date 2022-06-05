@@ -1,4 +1,5 @@
 black
+Cython
 isort
 loguru
 matplotlib
@@ -6,4 +7,5 @@ numba
 numpy
 pre-commit
 pylint
+setuptools
 tqdm

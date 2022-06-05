@@ -98,6 +98,17 @@
             ],
             "console": "integratedTerminal",
             "justMyCode": true
-        }
+        },
+        {
+            "name": "Cython",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "args": [
+                "cython",
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
     ]
 }

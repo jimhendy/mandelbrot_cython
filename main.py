@@ -12,12 +12,15 @@ from typing import Dict
 
 from loguru import logger
 
-from numba_python import Worker as numba_python
-from pure_python import Worker as pure_python
+import workers
 from utils import BaseWorker
 
 RUN_ID = datetime.datetime.now().strftime(r"%Y_%m_%d_%H_%M_%S")
-WORKERS: Dict[str, type[BaseWorker]] = {"pure": pure_python, "numba": numba_python}
+WORKERS: Dict[str, type[BaseWorker]] = {
+    "pure": workers.python_worker,
+    "numba": workers.numba_worker,
+    "cython": workers.cython_worker,
+}
 
 logger.add(f"logs/{RUN_ID}.log")
 logger.info(f"New Run initiated: {RUN_ID}")

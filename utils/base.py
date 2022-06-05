@@ -73,8 +73,8 @@ class BaseWorker(ABC):
         """
         if self.data is None:
             raise RuntimeError("Data not yet calculated, cannot save")
-        filename = self.output_dir / f"{self.run_id}.{self.format}"
-        logger.info(f"Saving image to {filename}")
+
+        logger.info(f"Saving image to {self.filename}")
 
         if self.image is None:
             self.image = plt.imshow(
@@ -91,7 +91,14 @@ class BaseWorker(ABC):
             self.image.set_data(self.data)
             plt.show()
 
-        plt.savefig(filename, dpi=500)
+        plt.savefig(self.filename, dpi=500)
+
+    @property
+    def filename(self):
+        """
+        Output filename for this image
+        """
+        return self.output_dir / f"{self.run_id}.{self.format}"
 
     @abstractmethod
     def _calculate(self):
