@@ -3,12 +3,18 @@
 /* BEGIN: Cython Metadata
 {
     "distutils": {
-        "name": "cython_python.cython_worker",
+        "extra_compile_args": [
+            "-fopenmp"
+        ],
+        "extra_link_args": [
+            "-fopenmp"
+        ],
+        "name": "cython_worker",
         "sources": [
-            "cython_python/cython_worker.pyx"
+            "workers/cython_python/cython_worker.pyx"
         ]
     },
-    "module_name": "cython_python.cython_worker"
+    "module_name": "cython_worker"
 }
 END: Cython Metadata */
 
@@ -702,8 +708,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__cython_python__cython_worker
-#define __PYX_HAVE_API__cython_python__cython_worker
+#define __PYX_HAVE__cython_worker
+#define __PYX_HAVE_API__cython_worker
 /* Early includes */
 #include "pythread.h"
 #include <string.h>
@@ -919,9 +925,16 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "cython_python/cython_worker.pyx",
+  "workers/cython_python/cython_worker.pyx",
   "stringsource",
 };
+/* NoFastGil.proto */
+#define __Pyx_PyGILState_Ensure PyGILState_Ensure
+#define __Pyx_PyGILState_Release PyGILState_Release
+#define __Pyx_FastGIL_Remember()
+#define __Pyx_FastGIL_Forget()
+#define __Pyx_FastGilFuncInit()
+
 /* MemviewSliceStruct.proto */
 struct __pyx_memoryview_obj;
 typedef struct {
@@ -986,13 +999,6 @@ typedef volatile __pyx_atomic_int_type __pyx_atomic_int;
 #ifndef __PYX_FORCE_INIT_THREADS
   #define __PYX_FORCE_INIT_THREADS 0
 #endif
-
-/* NoFastGil.proto */
-#define __Pyx_PyGILState_Ensure PyGILState_Ensure
-#define __Pyx_PyGILState_Release PyGILState_Release
-#define __Pyx_FastGIL_Remember()
-#define __Pyx_FastGIL_Forget()
-#define __Pyx_FastGilFuncInit()
 
 /* BufferFormatStructs.proto */
 #define IS_UNSIGNED(type) (((type) -1) > 0)
@@ -1801,7 +1807,7 @@ static PyObject *__pyx_memoryviewslice_assign_item_from_object(struct __pyx_memo
 
 /* Module declarations from 'cython' */
 
-/* Module declarations from 'cython_python.cython_worker' */
+/* Module declarations from 'cython_worker' */
 static PyTypeObject *__pyx_array_type = 0;
 static PyTypeObject *__pyx_MemviewEnum_type = 0;
 static PyTypeObject *__pyx_memoryview_type = 0;
@@ -1813,7 +1819,7 @@ static PyObject *contiguous = 0;
 static PyObject *indirect_contiguous = 0;
 static int __pyx_memoryview_thread_locks_used;
 static PyThread_type_lock __pyx_memoryview_thread_locks[8];
-static int __pyx_f_13cython_python_13cython_worker__mandel(double, double, int); /*proto*/
+static int __pyx_f_13cython_worker__mandel(double, double, int, int __pyx_skip_dispatch); /*proto*/
 static struct __pyx_array_obj *__pyx_array_new(PyObject *, Py_ssize_t, char *, char *, char *); /*proto*/
 static void *__pyx_align_pointer(void *, size_t); /*proto*/
 static PyObject *__pyx_memoryview_new(PyObject *, int, int, __Pyx_TypeInfo *); /*proto*/
@@ -1848,11 +1854,11 @@ static void __pyx_memoryview_slice_assign_scalar(__Pyx_memviewslice *, int, size
 static void __pyx_memoryview__slice_assign_scalar(char *, Py_ssize_t *, Py_ssize_t *, int, size_t, void *); /*proto*/
 static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *, PyObject *); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_int = { "int", NULL, sizeof(int), { 0 }, 0, IS_UNSIGNED(int) ? 'U' : 'I', IS_UNSIGNED(int), 0 };
-#define __Pyx_MODULE_NAME "cython_python.cython_worker"
-extern int __pyx_module_is_main_cython_python__cython_worker;
-int __pyx_module_is_main_cython_python__cython_worker = 0;
+#define __Pyx_MODULE_NAME "cython_worker"
+extern int __pyx_module_is_main_cython_worker;
+int __pyx_module_is_main_cython_worker = 0;
 
-/* Implementation of 'cython_python.cython_worker' */
+/* Implementation of 'cython_worker' */
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_MemoryError;
@@ -1872,6 +1878,7 @@ static const char __pyx_k_y_i[] = "y_i";
 static const char __pyx_k_base[] = "base";
 static const char __pyx_k_data[] = "data";
 static const char __pyx_k_dict[] = "__dict__";
+static const char __pyx_k_imag[] = "imag";
 static const char __pyx_k_intc[] = "intc";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_mode[] = "mode";
@@ -1879,6 +1886,7 @@ static const char __pyx_k_name[] = "name";
 static const char __pyx_k_ndim[] = "ndim";
 static const char __pyx_k_ones[] = "ones";
 static const char __pyx_k_pack[] = "pack";
+static const char __pyx_k_real[] = "real";
 static const char __pyx_k_size[] = "size";
 static const char __pyx_k_step[] = "step";
 static const char __pyx_k_stop[] = "stop";
@@ -1923,13 +1931,13 @@ static const char __pyx_k_pyx_state[] = "__pyx_state";
 static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
 static const char __pyx_k_IndexError[] = "IndexError";
 static const char __pyx_k_ValueError[] = "ValueError";
-static const char __pyx_k_iterations[] = "iterations";
 static const char __pyx_k_pyx_result[] = "__pyx_result";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_MemoryError[] = "MemoryError";
 static const char __pyx_k_PickleError[] = "PickleError";
 static const char __pyx_k_pyx_checksum[] = "__pyx_checksum";
 static const char __pyx_k_stringsource[] = "stringsource";
+static const char __pyx_k_cython_worker[] = "cython_worker";
 static const char __pyx_k_pyx_getbuffer[] = "__pyx_getbuffer";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
 static const char __pyx_k_max_iterations[] = "max_iterations";
@@ -1949,11 +1957,9 @@ static const char __pyx_k_MemoryView_of_r_at_0x_x[] = "<MemoryView of %r at 0x%x
 static const char __pyx_k_contiguous_and_indirect[] = "<contiguous and indirect>";
 static const char __pyx_k_Cannot_index_with_type_s[] = "Cannot index with type '%s'";
 static const char __pyx_k_Invalid_shape_in_axis_d_d[] = "Invalid shape in axis %d: %d.";
-static const char __pyx_k_cython_python_cython_worker[] = "cython_python.cython_worker";
 static const char __pyx_k_itemsize_0_for_cython_array[] = "itemsize <= 0 for cython.array";
 static const char __pyx_k_unable_to_allocate_array_data[] = "unable to allocate array data.";
 static const char __pyx_k_strided_and_direct_or_indirect[] = "<strided and direct or indirect>";
-static const char __pyx_k_cython_python_cython_worker_pyx[] = "cython_python/cython_worker.pyx";
 static const char __pyx_k_Buffer_view_does_not_expose_stri[] = "Buffer view does not expose strides";
 static const char __pyx_k_Can_only_create_a_buffer_that_is[] = "Can only create a buffer that is contiguous in memory.";
 static const char __pyx_k_Cannot_assign_to_read_only_memor[] = "Cannot assign to read-only memoryview";
@@ -1967,6 +1973,7 @@ static const char __pyx_k_Unable_to_convert_item_to_object[] = "Unable to conver
 static const char __pyx_k_got_differing_extents_in_dimensi[] = "got differing extents in dimension %d (got %d and %d)";
 static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
 static const char __pyx_k_unable_to_allocate_shape_and_str[] = "unable to allocate shape and strides.";
+static const char __pyx_k_workers_cython_python_cython_wor[] = "workers/cython_python/cython_worker.pyx";
 static PyObject *__pyx_n_s_ASCII;
 static PyObject *__pyx_kp_s_Buffer_view_does_not_expose_stri;
 static PyObject *__pyx_kp_s_Can_only_create_a_buffer_that_is;
@@ -1999,8 +2006,7 @@ static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_kp_s_contiguous_and_direct;
 static PyObject *__pyx_kp_s_contiguous_and_indirect;
 static PyObject *__pyx_n_s_cython_calculate;
-static PyObject *__pyx_n_s_cython_python_cython_worker;
-static PyObject *__pyx_kp_s_cython_python_cython_worker_pyx;
+static PyObject *__pyx_n_s_cython_worker;
 static PyObject *__pyx_n_s_data;
 static PyObject *__pyx_n_s_data_view;
 static PyObject *__pyx_n_s_dict;
@@ -2016,11 +2022,11 @@ static PyObject *__pyx_n_u_fortran;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_kp_s_got_differing_extents_in_dimensi;
 static PyObject *__pyx_n_s_id;
+static PyObject *__pyx_n_s_imag;
 static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_intc;
 static PyObject *__pyx_n_s_itemsize;
 static PyObject *__pyx_kp_s_itemsize_0_for_cython_array;
-static PyObject *__pyx_n_s_iterations;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_max_iterations;
 static PyObject *__pyx_n_s_max_x;
@@ -2051,6 +2057,7 @@ static PyObject *__pyx_n_s_pyx_type;
 static PyObject *__pyx_n_s_pyx_unpickle_Enum;
 static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_range;
+static PyObject *__pyx_n_s_real;
 static PyObject *__pyx_n_s_reduce;
 static PyObject *__pyx_n_s_reduce_cython;
 static PyObject *__pyx_n_s_reduce_ex;
@@ -2073,9 +2080,11 @@ static PyObject *__pyx_kp_s_unable_to_allocate_array_data;
 static PyObject *__pyx_kp_s_unable_to_allocate_shape_and_str;
 static PyObject *__pyx_n_s_unpack;
 static PyObject *__pyx_n_s_update;
+static PyObject *__pyx_kp_s_workers_cython_python_cython_wor;
 static PyObject *__pyx_n_s_x_i;
 static PyObject *__pyx_n_s_y_i;
-static PyObject *__pyx_pf_13cython_python_13cython_worker__cython_calculate(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_pixels_x, int __pyx_v_pixels_y, double __pyx_v_max_x, double __pyx_v_min_x, double __pyx_v_min_y, double __pyx_v_max_y, int __pyx_v_max_iterations); /* proto */
+static PyObject *__pyx_pf_13cython_worker__mandel(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_real, double __pyx_v_imag, int __pyx_v_max_iterations); /* proto */
+static PyObject *__pyx_pf_13cython_worker_2_cython_calculate(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_pixels_x, int __pyx_v_pixels_y, double __pyx_v_max_x, double __pyx_v_min_x, double __pyx_v_min_y, double __pyx_v_max_y, int __pyx_v_max_iterations); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array_2__getbuffer__(struct __pyx_array_obj *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_array___pyx_pf_15View_dot_MemoryView_5array_4__dealloc__(struct __pyx_array_obj *__pyx_v_self); /* proto */
@@ -2158,29 +2167,28 @@ static PyObject *__pyx_codeobj__21;
 static PyObject *__pyx_codeobj__28;
 /* Late includes */
 
-/* "cython_python/cython_worker.pyx":4
- * import cython
- *
- * cdef int _mandel(double real, double imag, int max_iterations):             # <<<<<<<<<<<<<<
+/* "cython_worker.pyx":8
+ * @cython.boundscheck(False)  # Deactivate bounds checking
+ * @cython.wraparound(False)   # Deactivate negative indexing.
+ * cpdef int _mandel(double real, double imag, int max_iterations) nogil:             # <<<<<<<<<<<<<<
  *     """determines if a point is in the Mandelbrot set based on deciding if,
  *     after a maximum allowed number of iterations, the absolute value of
  */
 
-static int __pyx_f_13cython_python_13cython_worker__mandel(double __pyx_v_real, double __pyx_v_imag, int __pyx_v_max_iterations) {
+static PyObject *__pyx_pw_13cython_worker_1_mandel(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_f_13cython_worker__mandel(double __pyx_v_real, double __pyx_v_imag, int __pyx_v_max_iterations, CYTHON_UNUSED int __pyx_skip_dispatch) {
   double __pyx_v_z_real;
   double __pyx_v_z_imag;
   int __pyx_v_counter;
   int __pyx_r;
-  __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   int __pyx_t_2;
   int __pyx_t_3;
   double __pyx_t_4;
   double __pyx_t_5;
   int __pyx_t_6;
-  __Pyx_RefNannySetupContext("_mandel", 0);
 
-  /* "cython_python/cython_worker.pyx":8
+  /* "cython_worker.pyx":12
  *     after a maximum allowed number of iterations, the absolute value of
  *     the resulting number is greater or equal to 2."""
  *     cdef double z_real = 0.0             # <<<<<<<<<<<<<<
@@ -2189,7 +2197,7 @@ static int __pyx_f_13cython_python_13cython_worker__mandel(double __pyx_v_real, 
  */
   __pyx_v_z_real = 0.0;
 
-  /* "cython_python/cython_worker.pyx":9
+  /* "cython_worker.pyx":13
  *     the resulting number is greater or equal to 2."""
  *     cdef double z_real = 0.0
  *     cdef double z_imag = 0.0             # <<<<<<<<<<<<<<
@@ -2198,7 +2206,7 @@ static int __pyx_f_13cython_python_13cython_worker__mandel(double __pyx_v_real, 
  */
   __pyx_v_z_imag = 0.0;
 
-  /* "cython_python/cython_worker.pyx":10
+  /* "cython_worker.pyx":14
  *     cdef double z_real = 0.0
  *     cdef double z_imag = 0.0
  *     cdef int counter = 0             # <<<<<<<<<<<<<<
@@ -2207,7 +2215,7 @@ static int __pyx_f_13cython_python_13cython_worker__mandel(double __pyx_v_real, 
  */
   __pyx_v_counter = 0;
 
-  /* "cython_python/cython_worker.pyx":12
+  /* "cython_worker.pyx":16
  *     cdef int counter = 0
  *
  *     for counter in range(0, max_iterations):             # <<<<<<<<<<<<<<
@@ -2219,7 +2227,7 @@ static int __pyx_f_13cython_python_13cython_worker__mandel(double __pyx_v_real, 
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_counter = __pyx_t_3;
 
-    /* "cython_python/cython_worker.pyx":14
+    /* "cython_worker.pyx":18
  *     for counter in range(0, max_iterations):
  *         z_real, z_imag = (
  *             z_real * z_real - z_imag * z_imag + real,             # <<<<<<<<<<<<<<
@@ -2228,7 +2236,7 @@ static int __pyx_f_13cython_python_13cython_worker__mandel(double __pyx_v_real, 
  */
     __pyx_t_4 = (((__pyx_v_z_real * __pyx_v_z_real) - (__pyx_v_z_imag * __pyx_v_z_imag)) + __pyx_v_real);
 
-    /* "cython_python/cython_worker.pyx":15
+    /* "cython_worker.pyx":19
  *         z_real, z_imag = (
  *             z_real * z_real - z_imag * z_imag + real,
  *             2 * z_real * z_imag + imag,             # <<<<<<<<<<<<<<
@@ -2239,7 +2247,7 @@ static int __pyx_f_13cython_python_13cython_worker__mandel(double __pyx_v_real, 
     __pyx_v_z_real = __pyx_t_4;
     __pyx_v_z_imag = __pyx_t_5;
 
-    /* "cython_python/cython_worker.pyx":17
+    /* "cython_worker.pyx":21
  *             2 * z_real * z_imag + imag,
  *         )
  *         if (z_real * z_real + z_imag * z_imag) >= 4:             # <<<<<<<<<<<<<<
@@ -2249,7 +2257,7 @@ static int __pyx_f_13cython_python_13cython_worker__mandel(double __pyx_v_real, 
     __pyx_t_6 = ((((__pyx_v_z_real * __pyx_v_z_real) + (__pyx_v_z_imag * __pyx_v_z_imag)) >= 4.0) != 0);
     if (__pyx_t_6) {
 
-      /* "cython_python/cython_worker.pyx":18
+      /* "cython_worker.pyx":22
  *         )
  *         if (z_real * z_real + z_imag * z_imag) >= 4:
  *             return counter             # <<<<<<<<<<<<<<
@@ -2259,7 +2267,7 @@ static int __pyx_f_13cython_python_13cython_worker__mandel(double __pyx_v_real, 
       __pyx_r = __pyx_v_counter;
       goto __pyx_L0;
 
-      /* "cython_python/cython_worker.pyx":17
+      /* "cython_worker.pyx":21
  *             2 * z_real * z_imag + imag,
  *         )
  *         if (z_real * z_real + z_imag * z_imag) >= 4:             # <<<<<<<<<<<<<<
@@ -2269,7 +2277,7 @@ static int __pyx_f_13cython_python_13cython_worker__mandel(double __pyx_v_real, 
     }
   }
 
-  /* "cython_python/cython_worker.pyx":19
+  /* "cython_worker.pyx":23
  *         if (z_real * z_real + z_imag * z_imag) >= 4:
  *             return counter
  *     return -1             # <<<<<<<<<<<<<<
@@ -2279,21 +2287,122 @@ static int __pyx_f_13cython_python_13cython_worker__mandel(double __pyx_v_real, 
   __pyx_r = -1;
   goto __pyx_L0;
 
-  /* "cython_python/cython_worker.pyx":4
- * import cython
- *
- * cdef int _mandel(double real, double imag, int max_iterations):             # <<<<<<<<<<<<<<
+  /* "cython_worker.pyx":8
+ * @cython.boundscheck(False)  # Deactivate bounds checking
+ * @cython.wraparound(False)   # Deactivate negative indexing.
+ * cpdef int _mandel(double real, double imag, int max_iterations) nogil:             # <<<<<<<<<<<<<<
  *     """determines if a point is in the Mandelbrot set based on deciding if,
  *     after a maximum allowed number of iterations, the absolute value of
  */
 
   /* function exit code */
   __pyx_L0:;
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_13cython_worker_1_mandel(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_13cython_worker__mandel[] = "determines if a point is in the Mandelbrot set based on deciding if,\n    after a maximum allowed number of iterations, the absolute value of\n    the resulting number is greater or equal to 2.";
+static PyObject *__pyx_pw_13cython_worker_1_mandel(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  double __pyx_v_real;
+  double __pyx_v_imag;
+  int __pyx_v_max_iterations;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("_mandel (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_real,&__pyx_n_s_imag,&__pyx_n_s_max_iterations,0};
+    PyObject* values[3] = {0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_real)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_imag)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("_mandel", 1, 3, 3, 1); __PYX_ERR(0, 8, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_max_iterations)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("_mandel", 1, 3, 3, 2); __PYX_ERR(0, 8, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_mandel") < 0)) __PYX_ERR(0, 8, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+    }
+    __pyx_v_real = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_real == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 8, __pyx_L3_error)
+    __pyx_v_imag = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_imag == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 8, __pyx_L3_error)
+    __pyx_v_max_iterations = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_max_iterations == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 8, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("_mandel", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 8, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("cython_worker._mandel", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_13cython_worker__mandel(__pyx_self, __pyx_v_real, __pyx_v_imag, __pyx_v_max_iterations);
+
+  /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cython_python/cython_worker.pyx":23
+static PyObject *__pyx_pf_13cython_worker__mandel(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_real, double __pyx_v_imag, int __pyx_v_max_iterations) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("_mandel", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_f_13cython_worker__mandel(__pyx_v_real, __pyx_v_imag, __pyx_v_max_iterations, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 8, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("cython_worker._mandel", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cython_worker.pyx":27
  * @cython.boundscheck(False)  # Deactivate bounds checking
  * @cython.wraparound(False)   # Deactivate negative indexing.
  * def _cython_calculate(             # <<<<<<<<<<<<<<
@@ -2302,9 +2411,9 @@ static int __pyx_f_13cython_python_13cython_worker__mandel(double __pyx_v_real, 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_13cython_python_13cython_worker_1_cython_calculate(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_13cython_python_13cython_worker_1_cython_calculate = {"_cython_calculate", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_13cython_python_13cython_worker_1_cython_calculate, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_13cython_python_13cython_worker_1_cython_calculate(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_13cython_worker_3_cython_calculate(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_13cython_worker_3_cython_calculate = {"_cython_calculate", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_13cython_worker_3_cython_calculate, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_13cython_worker_3_cython_calculate(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   int __pyx_v_pixels_x;
   int __pyx_v_pixels_y;
   double __pyx_v_max_x;
@@ -2351,41 +2460,41 @@ static PyObject *__pyx_pw_13cython_python_13cython_worker_1_cython_calculate(PyO
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_pixels_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, 1); __PYX_ERR(0, 23, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, 1); __PYX_ERR(0, 27, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_max_x)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, 2); __PYX_ERR(0, 23, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, 2); __PYX_ERR(0, 27, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_min_x)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, 3); __PYX_ERR(0, 23, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, 3); __PYX_ERR(0, 27, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_min_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, 4); __PYX_ERR(0, 23, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, 4); __PYX_ERR(0, 27, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_max_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, 5); __PYX_ERR(0, 23, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, 5); __PYX_ERR(0, 27, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_max_iterations)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, 6); __PYX_ERR(0, 23, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, 6); __PYX_ERR(0, 27, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_cython_calculate") < 0)) __PYX_ERR(0, 23, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_cython_calculate") < 0)) __PYX_ERR(0, 27, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 7) {
       goto __pyx_L5_argtuple_error;
@@ -2398,37 +2507,36 @@ static PyObject *__pyx_pw_13cython_python_13cython_worker_1_cython_calculate(PyO
       values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
       values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
     }
-    __pyx_v_pixels_x = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_pixels_x == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L3_error)
-    __pyx_v_pixels_y = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_pixels_y == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 25, __pyx_L3_error)
-    __pyx_v_max_x = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_max_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 26, __pyx_L3_error)
-    __pyx_v_min_x = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_min_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 27, __pyx_L3_error)
-    __pyx_v_min_y = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_min_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L3_error)
-    __pyx_v_max_y = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_max_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 29, __pyx_L3_error)
-    __pyx_v_max_iterations = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_max_iterations == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L3_error)
+    __pyx_v_pixels_x = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_pixels_x == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L3_error)
+    __pyx_v_pixels_y = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_pixels_y == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 29, __pyx_L3_error)
+    __pyx_v_max_x = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_max_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L3_error)
+    __pyx_v_min_x = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_min_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 31, __pyx_L3_error)
+    __pyx_v_min_y = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_min_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L3_error)
+    __pyx_v_max_y = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_max_y == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L3_error)
+    __pyx_v_max_iterations = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_max_iterations == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 23, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("_cython_calculate", 1, 7, 7, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 27, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("cython_python.cython_worker._cython_calculate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cython_worker._cython_calculate", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_13cython_python_13cython_worker__cython_calculate(__pyx_self, __pyx_v_pixels_x, __pyx_v_pixels_y, __pyx_v_max_x, __pyx_v_min_x, __pyx_v_min_y, __pyx_v_max_y, __pyx_v_max_iterations);
+  __pyx_r = __pyx_pf_13cython_worker_2_cython_calculate(__pyx_self, __pyx_v_pixels_x, __pyx_v_pixels_y, __pyx_v_max_x, __pyx_v_min_x, __pyx_v_min_y, __pyx_v_max_y, __pyx_v_max_iterations);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_13cython_python_13cython_worker__cython_calculate(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_pixels_x, int __pyx_v_pixels_y, double __pyx_v_max_x, double __pyx_v_min_x, double __pyx_v_min_y, double __pyx_v_max_y, int __pyx_v_max_iterations) {
+static PyObject *__pyx_pf_13cython_worker_2_cython_calculate(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_pixels_x, int __pyx_v_pixels_y, double __pyx_v_max_x, double __pyx_v_min_x, double __pyx_v_min_y, double __pyx_v_max_y, int __pyx_v_max_iterations) {
   double __pyx_v_step_x;
   double __pyx_v_step_y;
   PyObject *__pyx_v_data = NULL;
   __Pyx_memviewslice __pyx_v_data_view = { 0, 0, { 0 }, { 0 }, { 0 } };
   int __pyx_v_x_i;
   int __pyx_v_y_i;
-  int __pyx_v_iterations;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   double __pyx_t_1;
@@ -2439,11 +2547,11 @@ static PyObject *__pyx_pf_13cython_python_13cython_worker__cython_calculate(CYTH
   PyObject *__pyx_t_6 = NULL;
   __Pyx_memviewslice __pyx_t_7 = { 0, 0, { 0 }, { 0 }, { 0 } };
   int __pyx_t_8;
-  int __pyx_t_9;
-  int __pyx_t_10;
+  long __pyx_t_9;
+  long __pyx_t_10;
   int __pyx_t_11;
-  int __pyx_t_12;
-  int __pyx_t_13;
+  long __pyx_t_12;
+  long __pyx_t_13;
   Py_ssize_t __pyx_t_14;
   Py_ssize_t __pyx_t_15;
   int __pyx_lineno = 0;
@@ -2451,7 +2559,7 @@ static PyObject *__pyx_pf_13cython_python_13cython_worker__cython_calculate(CYTH
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_cython_calculate", 0);
 
-  /* "cython_python/cython_worker.pyx":33
+  /* "cython_worker.pyx":37
  * ):
  *
  *     cdef double step_x = (max_x - min_x) / pixels_x             # <<<<<<<<<<<<<<
@@ -2461,11 +2569,11 @@ static PyObject *__pyx_pf_13cython_python_13cython_worker__cython_calculate(CYTH
   __pyx_t_1 = (__pyx_v_max_x - __pyx_v_min_x);
   if (unlikely(__pyx_v_pixels_x == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 33, __pyx_L1_error)
+    __PYX_ERR(0, 37, __pyx_L1_error)
   }
   __pyx_v_step_x = (__pyx_t_1 / __pyx_v_pixels_x);
 
-  /* "cython_python/cython_worker.pyx":34
+  /* "cython_worker.pyx":38
  *
  *     cdef double step_x = (max_x - min_x) / pixels_x
  *     cdef double step_y = (max_y - min_y) / pixels_y             # <<<<<<<<<<<<<<
@@ -2475,29 +2583,29 @@ static PyObject *__pyx_pf_13cython_python_13cython_worker__cython_calculate(CYTH
   __pyx_t_1 = (__pyx_v_max_y - __pyx_v_min_y);
   if (unlikely(__pyx_v_pixels_y == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 34, __pyx_L1_error)
+    __PYX_ERR(0, 38, __pyx_L1_error)
   }
   __pyx_v_step_y = (__pyx_t_1 / __pyx_v_pixels_y);
 
-  /* "cython_python/cython_worker.pyx":36
+  /* "cython_worker.pyx":40
  *     cdef double step_y = (max_y - min_y) / pixels_y
  *
  *     data = np.ones(shape=(pixels_y, pixels_x), dtype=np.intc)             # <<<<<<<<<<<<<<
  *     cdef int[:, ::1] data_view = data
  *
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_ones); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_ones); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_pixels_y); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_pixels_y); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_pixels_x); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_pixels_x); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_4);
   PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4);
@@ -2505,100 +2613,165 @@ static PyObject *__pyx_pf_13cython_python_13cython_worker__cython_calculate(CYTH
   PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_t_5);
   __pyx_t_4 = 0;
   __pyx_t_5 = 0;
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_shape, __pyx_t_6) < 0) __PYX_ERR(0, 36, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_shape, __pyx_t_6) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_intc); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_intc); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_5) < 0) __PYX_ERR(0, 36, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_5) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_data = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "cython_python/cython_worker.pyx":37
+  /* "cython_worker.pyx":41
  *
  *     data = np.ones(shape=(pixels_y, pixels_x), dtype=np.intc)
  *     cdef int[:, ::1] data_view = data             # <<<<<<<<<<<<<<
  *
  *     cdef int x_i = 0
  */
-  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_int(__pyx_v_data, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_int(__pyx_v_data, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 41, __pyx_L1_error)
   __pyx_v_data_view = __pyx_t_7;
   __pyx_t_7.memview = NULL;
   __pyx_t_7.data = NULL;
 
-  /* "cython_python/cython_worker.pyx":39
+  /* "cython_worker.pyx":43
  *     cdef int[:, ::1] data_view = data
  *
  *     cdef int x_i = 0             # <<<<<<<<<<<<<<
  *     cdef int y_i = 0
- *     cdef int iterations
+ *
  */
   __pyx_v_x_i = 0;
 
-  /* "cython_python/cython_worker.pyx":40
+  /* "cython_worker.pyx":44
  *
  *     cdef int x_i = 0
  *     cdef int y_i = 0             # <<<<<<<<<<<<<<
- *     cdef int iterations
  *
+ *     for x_i in prange(0, pixels_x, nogil=True, schedule="dynamic"):
  */
   __pyx_v_y_i = 0;
 
-  /* "cython_python/cython_worker.pyx":43
- *     cdef int iterations
+  /* "cython_worker.pyx":46
+ *     cdef int y_i = 0
  *
- *     for x_i in range(0, pixels_x):             # <<<<<<<<<<<<<<
- *         for y_i in range(0, pixels_y):
- *             iterations = _mandel(
+ *     for x_i in prange(0, pixels_x, nogil=True, schedule="dynamic"):             # <<<<<<<<<<<<<<
+ *         for y_i in prange(0, pixels_y):
+ *             data_view[y_i, x_i] = _mandel(
  */
-  __pyx_t_8 = __pyx_v_pixels_x;
-  __pyx_t_9 = __pyx_t_8;
-  for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
-    __pyx_v_x_i = __pyx_t_10;
+  {
+      #ifdef WITH_THREAD
+      PyThreadState *_save;
+      Py_UNBLOCK_THREADS
+      __Pyx_FastGIL_Remember();
+      #endif
+      /*try:*/ {
+        __pyx_t_8 = __pyx_v_pixels_x;
+        if ((1 == 0)) abort();
+        {
+            #if ((defined(__APPLE__) || defined(__OSX__)) && (defined(__GNUC__) && (__GNUC__ > 2 || (__GNUC__ == 2 && (__GNUC_MINOR__ > 95)))))
+                #undef likely
+                #undef unlikely
+                #define likely(x)   (x)
+                #define unlikely(x) (x)
+            #endif
+            __pyx_t_10 = (__pyx_t_8 - 0 + 1 - 1/abs(1)) / 1;
+            if (__pyx_t_10 > 0)
+            {
+                #ifdef _OPENMP
+                #pragma omp parallel private(__pyx_t_11, __pyx_t_12, __pyx_t_13, __pyx_t_14, __pyx_t_15)
+                #endif /* _OPENMP */
+                {
+                    #ifdef _OPENMP
+                    #pragma omp for firstprivate(__pyx_v_x_i) lastprivate(__pyx_v_x_i) lastprivate(__pyx_v_y_i) schedule(dynamic)
+                    #endif /* _OPENMP */
+                    for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_10; __pyx_t_9++){
+                        {
+                            __pyx_v_x_i = (int)(0 + 1 * __pyx_t_9);
+                            /* Initialize private variables to invalid values */
+                            __pyx_v_y_i = ((int)0xbad0bad0);
 
-    /* "cython_python/cython_worker.pyx":44
+                            /* "cython_worker.pyx":47
  *
- *     for x_i in range(0, pixels_x):
- *         for y_i in range(0, pixels_y):             # <<<<<<<<<<<<<<
- *             iterations = _mandel(
+ *     for x_i in prange(0, pixels_x, nogil=True, schedule="dynamic"):
+ *         for y_i in prange(0, pixels_y):             # <<<<<<<<<<<<<<
+ *             data_view[y_i, x_i] = _mandel(
  *                 real=min_x + (x_i + 0.5) * step_x,
  */
-    __pyx_t_11 = __pyx_v_pixels_y;
-    __pyx_t_12 = __pyx_t_11;
-    for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
-      __pyx_v_y_i = __pyx_t_13;
+                            __pyx_t_11 = __pyx_v_pixels_y;
+                            if ((1 == 0)) abort();
+                            {
+                                __pyx_t_13 = (__pyx_t_11 - 0 + 1 - 1/abs(1)) / 1;
+                                if (__pyx_t_13 > 0)
+                                {
+                                    #if 0
+                                    #pragma omp parallel
+                                    #endif /* _OPENMP */
+                                    {
+                                        #if 0
+                                        #pragma omp for firstprivate(__pyx_v_y_i) lastprivate(__pyx_v_y_i)
+                                        #endif /* _OPENMP */
+                                        for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_13; __pyx_t_12++){
+                                            {
+                                                __pyx_v_y_i = (int)(0 + 1 * __pyx_t_12);
 
-      /* "cython_python/cython_worker.pyx":45
- *     for x_i in range(0, pixels_x):
- *         for y_i in range(0, pixels_y):
- *             iterations = _mandel(             # <<<<<<<<<<<<<<
+                                                /* "cython_worker.pyx":48
+ *     for x_i in prange(0, pixels_x, nogil=True, schedule="dynamic"):
+ *         for y_i in prange(0, pixels_y):
+ *             data_view[y_i, x_i] = _mandel(             # <<<<<<<<<<<<<<
  *                 real=min_x + (x_i + 0.5) * step_x,
  *                 imag=min_y + (y_i + 0.5) * step_y,
  */
-      __pyx_v_iterations = __pyx_f_13cython_python_13cython_worker__mandel((__pyx_v_min_x + ((__pyx_v_x_i + 0.5) * __pyx_v_step_x)), (__pyx_v_min_y + ((__pyx_v_y_i + 0.5) * __pyx_v_step_y)), __pyx_v_max_iterations);
+                                                __pyx_t_14 = __pyx_v_y_i;
+                                                __pyx_t_15 = __pyx_v_x_i;
+                                                *((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_data_view.data + __pyx_t_14 * __pyx_v_data_view.strides[0]) )) + __pyx_t_15)) )) = __pyx_f_13cython_worker__mandel((__pyx_v_min_x + ((__pyx_v_x_i + 0.5) * __pyx_v_step_x)), (__pyx_v_min_y + ((__pyx_v_y_i + 0.5) * __pyx_v_step_y)), __pyx_v_max_iterations, 0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #if ((defined(__APPLE__) || defined(__OSX__)) && (defined(__GNUC__) && (__GNUC__ > 2 || (__GNUC__ == 2 && (__GNUC_MINOR__ > 95)))))
+            #undef likely
+            #undef unlikely
+            #define likely(x)   __builtin_expect(!!(x), 1)
+            #define unlikely(x) __builtin_expect(!!(x), 0)
+        #endif
+      }
 
-      /* "cython_python/cython_worker.pyx":50
- *                 max_iterations=max_iterations,
- *             )
- *             data_view[y_i, x_i] = iterations             # <<<<<<<<<<<<<<
- *     return data
+      /* "cython_worker.pyx":46
+ *     cdef int y_i = 0
+ *
+ *     for x_i in prange(0, pixels_x, nogil=True, schedule="dynamic"):             # <<<<<<<<<<<<<<
+ *         for y_i in prange(0, pixels_y):
+ *             data_view[y_i, x_i] = _mandel(
  */
-      __pyx_t_14 = __pyx_v_y_i;
-      __pyx_t_15 = __pyx_v_x_i;
-      *((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_data_view.data + __pyx_t_14 * __pyx_v_data_view.strides[0]) )) + __pyx_t_15)) )) = __pyx_v_iterations;
-    }
+      /*finally:*/ {
+        /*normal exit:*/{
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L5;
+        }
+        __pyx_L5:;
+      }
   }
 
-  /* "cython_python/cython_worker.pyx":51
+  /* "cython_worker.pyx":53
+ *                 max_iterations=max_iterations,
  *             )
- *             data_view[y_i, x_i] = iterations
  *     return data             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
@@ -2606,7 +2779,7 @@ static PyObject *__pyx_pf_13cython_python_13cython_worker__cython_calculate(CYTH
   __pyx_r = __pyx_v_data;
   goto __pyx_L0;
 
-  /* "cython_python/cython_worker.pyx":23
+  /* "cython_worker.pyx":27
  * @cython.boundscheck(False)  # Deactivate bounds checking
  * @cython.wraparound(False)   # Deactivate negative indexing.
  * def _cython_calculate(             # <<<<<<<<<<<<<<
@@ -2622,7 +2795,7 @@ static PyObject *__pyx_pf_13cython_python_13cython_worker__cython_calculate(CYTH
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
   __PYX_XDEC_MEMVIEW(&__pyx_t_7, 1);
-  __Pyx_AddTraceback("cython_python.cython_worker._cython_calculate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cython_worker._cython_calculate", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_data);
@@ -15776,7 +15949,7 @@ static PyBufferProcs __pyx_tp_as_buffer_array = {
 
 static PyTypeObject __pyx_type___pyx_array = {
   PyVarObject_HEAD_INIT(0, 0)
-  "cython_python.cython_worker.array", /*tp_name*/
+  "cython_worker.array", /*tp_name*/
   sizeof(struct __pyx_array_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_array, /*tp_dealloc*/
@@ -15898,7 +16071,7 @@ static PyMethodDef __pyx_methods_Enum[] = {
 
 static PyTypeObject __pyx_type___pyx_MemviewEnum = {
   PyVarObject_HEAD_INIT(0, 0)
-  "cython_python.cython_worker.Enum", /*tp_name*/
+  "cython_worker.Enum", /*tp_name*/
   sizeof(struct __pyx_MemviewEnum_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_Enum, /*tp_dealloc*/
@@ -16162,7 +16335,7 @@ static PyBufferProcs __pyx_tp_as_buffer_memoryview = {
 
 static PyTypeObject __pyx_type___pyx_memoryview = {
   PyVarObject_HEAD_INIT(0, 0)
-  "cython_python.cython_worker.memoryview", /*tp_name*/
+  "cython_worker.memoryview", /*tp_name*/
   sizeof(struct __pyx_memoryview_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_memoryview, /*tp_dealloc*/
@@ -16303,7 +16476,7 @@ static struct PyGetSetDef __pyx_getsets__memoryviewslice[] = {
 
 static PyTypeObject __pyx_type___pyx_memoryviewslice = {
   PyVarObject_HEAD_INIT(0, 0)
-  "cython_python.cython_worker._memoryviewslice", /*tp_name*/
+  "cython_worker._memoryviewslice", /*tp_name*/
   sizeof(struct __pyx_memoryviewslice_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc__memoryviewslice, /*tp_dealloc*/
@@ -16382,6 +16555,7 @@ static PyTypeObject __pyx_type___pyx_memoryviewslice = {
 };
 
 static PyMethodDef __pyx_methods[] = {
+  {"_mandel", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_13cython_worker_1_mandel, METH_VARARGS|METH_KEYWORDS, __pyx_doc_13cython_worker__mandel},
   {0, 0, 0, 0}
 };
 
@@ -16459,8 +16633,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_contiguous_and_direct, __pyx_k_contiguous_and_direct, sizeof(__pyx_k_contiguous_and_direct), 0, 0, 1, 0},
   {&__pyx_kp_s_contiguous_and_indirect, __pyx_k_contiguous_and_indirect, sizeof(__pyx_k_contiguous_and_indirect), 0, 0, 1, 0},
   {&__pyx_n_s_cython_calculate, __pyx_k_cython_calculate, sizeof(__pyx_k_cython_calculate), 0, 0, 1, 1},
-  {&__pyx_n_s_cython_python_cython_worker, __pyx_k_cython_python_cython_worker, sizeof(__pyx_k_cython_python_cython_worker), 0, 0, 1, 1},
-  {&__pyx_kp_s_cython_python_cython_worker_pyx, __pyx_k_cython_python_cython_worker_pyx, sizeof(__pyx_k_cython_python_cython_worker_pyx), 0, 0, 1, 0},
+  {&__pyx_n_s_cython_worker, __pyx_k_cython_worker, sizeof(__pyx_k_cython_worker), 0, 0, 1, 1},
   {&__pyx_n_s_data, __pyx_k_data, sizeof(__pyx_k_data), 0, 0, 1, 1},
   {&__pyx_n_s_data_view, __pyx_k_data_view, sizeof(__pyx_k_data_view), 0, 0, 1, 1},
   {&__pyx_n_s_dict, __pyx_k_dict, sizeof(__pyx_k_dict), 0, 0, 1, 1},
@@ -16476,11 +16649,11 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_kp_s_got_differing_extents_in_dimensi, __pyx_k_got_differing_extents_in_dimensi, sizeof(__pyx_k_got_differing_extents_in_dimensi), 0, 0, 1, 0},
   {&__pyx_n_s_id, __pyx_k_id, sizeof(__pyx_k_id), 0, 0, 1, 1},
+  {&__pyx_n_s_imag, __pyx_k_imag, sizeof(__pyx_k_imag), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_intc, __pyx_k_intc, sizeof(__pyx_k_intc), 0, 0, 1, 1},
   {&__pyx_n_s_itemsize, __pyx_k_itemsize, sizeof(__pyx_k_itemsize), 0, 0, 1, 1},
   {&__pyx_kp_s_itemsize_0_for_cython_array, __pyx_k_itemsize_0_for_cython_array, sizeof(__pyx_k_itemsize_0_for_cython_array), 0, 0, 1, 0},
-  {&__pyx_n_s_iterations, __pyx_k_iterations, sizeof(__pyx_k_iterations), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_max_iterations, __pyx_k_max_iterations, sizeof(__pyx_k_max_iterations), 0, 0, 1, 1},
   {&__pyx_n_s_max_x, __pyx_k_max_x, sizeof(__pyx_k_max_x), 0, 0, 1, 1},
@@ -16511,6 +16684,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_pyx_unpickle_Enum, __pyx_k_pyx_unpickle_Enum, sizeof(__pyx_k_pyx_unpickle_Enum), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
+  {&__pyx_n_s_real, __pyx_k_real, sizeof(__pyx_k_real), 0, 0, 1, 1},
   {&__pyx_n_s_reduce, __pyx_k_reduce, sizeof(__pyx_k_reduce), 0, 0, 1, 1},
   {&__pyx_n_s_reduce_cython, __pyx_k_reduce_cython, sizeof(__pyx_k_reduce_cython), 0, 0, 1, 1},
   {&__pyx_n_s_reduce_ex, __pyx_k_reduce_ex, sizeof(__pyx_k_reduce_ex), 0, 0, 1, 1},
@@ -16533,12 +16707,13 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_unable_to_allocate_shape_and_str, __pyx_k_unable_to_allocate_shape_and_str, sizeof(__pyx_k_unable_to_allocate_shape_and_str), 0, 0, 1, 0},
   {&__pyx_n_s_unpack, __pyx_k_unpack, sizeof(__pyx_k_unpack), 0, 0, 1, 1},
   {&__pyx_n_s_update, __pyx_k_update, sizeof(__pyx_k_update), 0, 0, 1, 1},
+  {&__pyx_kp_s_workers_cython_python_cython_wor, __pyx_k_workers_cython_python_cython_wor, sizeof(__pyx_k_workers_cython_python_cython_wor), 0, 0, 1, 0},
   {&__pyx_n_s_x_i, __pyx_k_x_i, sizeof(__pyx_k_x_i), 0, 0, 1, 1},
   {&__pyx_n_s_y_i, __pyx_k_y_i, sizeof(__pyx_k_y_i), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 12, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 16, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 133, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(1, 148, __pyx_L1_error)
   __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(1, 151, __pyx_L1_error)
@@ -16750,17 +16925,17 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__19);
   __Pyx_GIVEREF(__pyx_tuple__19);
 
-  /* "cython_python/cython_worker.pyx":23
+  /* "cython_worker.pyx":27
  * @cython.boundscheck(False)  # Deactivate bounds checking
  * @cython.wraparound(False)   # Deactivate negative indexing.
  * def _cython_calculate(             # <<<<<<<<<<<<<<
  *     int pixels_x,
  *     int pixels_y,
  */
-  __pyx_tuple__20 = PyTuple_Pack(14, __pyx_n_s_pixels_x, __pyx_n_s_pixels_y, __pyx_n_s_max_x, __pyx_n_s_min_x, __pyx_n_s_min_y, __pyx_n_s_max_y, __pyx_n_s_max_iterations, __pyx_n_s_step_x, __pyx_n_s_step_y, __pyx_n_s_data, __pyx_n_s_data_view, __pyx_n_s_x_i, __pyx_n_s_y_i, __pyx_n_s_iterations); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 23, __pyx_L1_error)
+  __pyx_tuple__20 = PyTuple_Pack(13, __pyx_n_s_pixels_x, __pyx_n_s_pixels_y, __pyx_n_s_max_x, __pyx_n_s_min_x, __pyx_n_s_min_y, __pyx_n_s_max_y, __pyx_n_s_max_iterations, __pyx_n_s_step_x, __pyx_n_s_step_y, __pyx_n_s_data, __pyx_n_s_data_view, __pyx_n_s_x_i, __pyx_n_s_y_i); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 27, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__20);
   __Pyx_GIVEREF(__pyx_tuple__20);
-  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(7, 0, 14, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_python_cython_worker_pyx, __pyx_n_s_cython_calculate, 23, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 23, __pyx_L1_error)
+  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(7, 0, 13, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_workers_cython_python_cython_wor, __pyx_n_s_cython_calculate, 27, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 27, __pyx_L1_error)
 
   /* "View.MemoryView":286
  *         return self.name
@@ -16834,6 +17009,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
 }
 
 static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
+  /* InitThreads.init */
+  #if defined(WITH_THREAD) && PY_VERSION_HEX < 0x030700F0
+PyEval_InitThreads();
+#endif
+
+if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 1, __pyx_L1_error)
+
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
   __pyx_int_0 = PyInt_FromLong(0); if (unlikely(!__pyx_int_0)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_1 = PyInt_FromLong(1); if (unlikely(!__pyx_int_1)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -17145,14 +17327,14 @@ if (!__Pyx_RefNanny) {
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_cython_python__cython_worker) {
+  if (__pyx_module_is_main_cython_worker) {
     if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name_2, __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "cython_python.cython_worker")) {
-      if (unlikely(PyDict_SetItemString(modules, "cython_python.cython_worker", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "cython_worker")) {
+      if (unlikely(PyDict_SetItemString(modules, "cython_worker", __pyx_m) < 0)) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -17173,32 +17355,33 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "cython_python/cython_worker.pyx":1
- * import numpy as np             # <<<<<<<<<<<<<<
+  /* "cython_worker.pyx":2
  * import cython
+ * import numpy as np             # <<<<<<<<<<<<<<
+ * from cython.parallel import prange
  *
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython_python/cython_worker.pyx":23
+  /* "cython_worker.pyx":27
  * @cython.boundscheck(False)  # Deactivate bounds checking
  * @cython.wraparound(False)   # Deactivate negative indexing.
  * def _cython_calculate(             # <<<<<<<<<<<<<<
  *     int pixels_x,
  *     int pixels_y,
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13cython_python_13cython_worker_1_cython_calculate, NULL, __pyx_n_s_cython_python_cython_worker); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 23, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13cython_worker_3_cython_calculate, NULL, __pyx_n_s_cython_worker); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 27, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_cython_calculate, __pyx_t_1) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_cython_calculate, __pyx_t_1) < 0) __PYX_ERR(0, 27, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython_python/cython_worker.pyx":1
- * import numpy as np             # <<<<<<<<<<<<<<
- * import cython
- *
+  /* "cython_worker.pyx":1
+ * import cython             # <<<<<<<<<<<<<<
+ * import numpy as np
+ * from cython.parallel import prange
  */
   __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -17365,11 +17548,11 @@ if (!__Pyx_RefNanny) {
   __Pyx_XDECREF(__pyx_t_1);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init cython_python.cython_worker", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init cython_worker", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_CLEAR(__pyx_m);
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init cython_python.cython_worker");
+    PyErr_SetString(PyExc_ImportError, "init cython_worker");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();

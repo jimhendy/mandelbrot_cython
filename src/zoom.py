@@ -10,21 +10,21 @@ from workers.cython_python.worker import Worker
 
 logger.add(f"logs/film_{datetime.datetime.now().strftime(r'%Y_%m_%d_%H_%M_%S')}.log")
 
-CENTER = (-2, 0)
-ZOOM = 0.01
-N_OUTPUTS = 1000
+CENTER = (-0.725, -0.21)
+ZOOM = 0.03
+N_OUTPUTS = 10_000
 
 min_x = -2.5
 max_x = 1.2
 min_y = -1.2
 max_y = 1.2
-max_iterations = 20
-pixels_x = 6_000
-pixels_y = 6_000
+max_iterations = 500
+pixels_x = 10_000
+pixels_y = 10_000
 
-output_dir = Path(__file__).parent / "film"
+output_dir = Path(__file__).parents[1] / "film"
 output_dir.mkdir(exist_ok=True, parents=True)
-tmp_dir = Path(__file__).parent / "output"
+tmp_dir = Path(__file__).parents[1] / "output"
 
 worker = Worker(
     min_x=min_x,
@@ -63,5 +63,5 @@ try:
 except Exception as e:  # pylint: disable=broad-except
     logger.error(e)
 
-ff_cmd = f"ffmpeg -y -framerate 10 -i {output_dir.name}/%04d.png -c:v copy out.mp4"
+ff_cmd = f"ffmpeg -y -framerate 24 -i {output_dir.name}/%04d.png out.mp4"
 subprocess.call(ff_cmd, shell=True)

@@ -3,7 +3,9 @@ import numpy as np
 from cython.parallel import prange
 
 
-cdef int _mandel(double real, double imag, int max_iterations) nogil:
+@cython.boundscheck(False)  # Deactivate bounds checking
+@cython.wraparound(False)   # Deactivate negative indexing.
+cpdef int _mandel(double real, double imag, int max_iterations) nogil:
     """determines if a point is in the Mandelbrot set based on deciding if,
     after a maximum allowed number of iterations, the absolute value of
     the resulting number is greater or equal to 2."""
@@ -40,14 +42,12 @@ def _cython_calculate(
 
     cdef int x_i = 0
     cdef int y_i = 0
-    cdef int iterations
 
-    for x_i in prange(0, pixels_x, nogil=True):
+    for x_i in prange(0, pixels_x, nogil=True, schedule="dynamic"):
         for y_i in prange(0, pixels_y):
-            iterations = _mandel(
+            data_view[y_i, x_i] = _mandel(
                 real=min_x + (x_i + 0.5) * step_x,
                 imag=min_y + (y_i + 0.5) * step_y,
                 max_iterations=max_iterations,
             )
-            data_view[y_i, x_i] = iterations
     return data

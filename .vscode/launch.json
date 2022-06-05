@@ -9,7 +9,8 @@
                 "pure",
             ],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/src"
         },
         {
             "name": "Pure Python (Small)",
@@ -24,7 +25,8 @@
                 "5"
             ],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/src"
         },
         {
             "name": "Pure Python (Large)",
@@ -39,7 +41,8 @@
                 "5_000",
             ],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/src"
         },
         {
             "name": "Numba",
@@ -50,7 +53,8 @@
                 "numba",
             ],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/src"
         },
         {
             "name": "Numba (Small)",
@@ -65,7 +69,8 @@
                 "5"
             ],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/src"
         },
         {
             "name": "Numba (Large)",
@@ -82,7 +87,8 @@
                 "50"
             ],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/src"
         },
         {
             "name": "Numba (Huge)",
@@ -97,7 +103,8 @@
                 "10_000",
             ],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/src"
         },
         {
             "name": "Cython",
@@ -108,7 +115,34 @@
                 "cython",
             ],
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/src"
+        },
+        {
+            "name": "Cython detailed",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "args": [
+                "cython",
+                "--min_x",
+                "-0.75",
+                "--max_x",
+                "-0.7",
+                "--min_y",
+                "-.22",
+                "--max_y",
+                "-0.2",
+                "--pixels_x",
+                "15_000",
+                "--pixels_y",
+                "5_000",
+                "--max_iterations",
+                "500"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}/src"
         },
     ]
 }

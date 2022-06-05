@@ -58,7 +58,7 @@ class BaseWorker(ABC):
         self.data = None
         self.run_id = run_id
         self.format = img_format
-        self.output_dir = Path(__file__).parents[1] / "output"
+        self.output_dir = Path(__file__).parents[2] / "output"
 
         self._setup()
 
