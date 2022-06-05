@@ -4,3 +4,4 @@ disable=
     R0913, # too-many-arguments
     R0902, # too-many-instance-attributes
     E0401, # import-error
+    R0801, # duplicate-code

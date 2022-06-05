@@ -3,3 +3,5 @@ output
 .vscode
 *.ipynb
 **.pyc
+film/
+**.mp4

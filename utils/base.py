@@ -4,9 +4,12 @@ from functools import wraps
 from pathlib import Path
 from typing import Any, Callable
 
+import matplotlib
 from loguru import logger
 
-from utils.plotting import save_pdf
+matplotlib.use("Agg")
+
+import matplotlib.pyplot as plt  # pylint: disable=wrong-import-position,ungrouped-imports
 
 
 def timer(func: Callable) -> Any:
@@ -39,7 +42,8 @@ class BaseWorker(ABC):
         pixels_x: int,
         pixels_y: int,
         max_iterations: int,
-        cmap: str = "Reds",
+        img_format: str,
+        cmap: str,
         run_id: str = "unnamed",
     ):
         self.min_x = min_x
@@ -51,7 +55,9 @@ class BaseWorker(ABC):
         self.max_iterations = max_iterations
         self.cmap = cmap
         self.image = None
+        self.data = None
         self.run_id = run_id
+        self.format = img_format
         self.output_dir = Path(__file__).parents[1] / "output"
 
         self._setup()
@@ -65,17 +71,27 @@ class BaseWorker(ABC):
         """
         Save the `self.image` to a file
         """
+        if self.data is None:
+            raise RuntimeError("Data not yet calculated, cannot save")
+        filename = self.output_dir / f"{self.run_id}.{self.format}"
+        logger.info(f"Saving image to {filename}")
+
         if self.image is None:
-            raise RuntimeError("Image not yet calculated, cannot save")
-        save_pdf(
-            image=self.image,
-            filename=self.output_dir / f"{self.run_id}.pdf",
-            cmap=self.cmap,
-            min_x=self.min_x,
-            max_x=self.max_x,
-            min_y=self.min_y,
-            max_y=self.max_y,
-        )
+            self.image = plt.imshow(
+                self.data,
+                interpolation="none",
+                cmap=self.cmap,
+                aspect="auto",
+                vmax=self.max_iterations,
+                vmin=-1,
+            )
+            plt.gca().axis("off")
+            plt.tight_layout()
+        else:
+            self.image.set_data(self.data)
+            plt.show()
+
+        plt.savefig(filename, dpi=500)
 
     @abstractmethod
     def _calculate(self):
@@ -87,7 +103,7 @@ class BaseWorker(ABC):
         Calculate the Mandelbrot set image
         """
         logger.info("Starting calculation")
-        self.image = self._calculate(*args, **kwargs)
+        self.data = self._calculate(*args, **kwargs)
         logger.info("Calcualtion complete")
 
     def _log_config(self):

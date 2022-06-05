@@ -40,6 +40,64 @@
             ],
             "console": "integratedTerminal",
             "justMyCode": true
+        },
+        {
+            "name": "Numba",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "args": [
+                "numba",
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Numba (Small)",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "args": [
+                "numba",
+                "--pixels_x",
+                "5",
+                "--pixels_y",
+                "5"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Numba (Large)",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "args": [
+                "numba",
+                "--pixels_x",
+                "5_000",
+                "--pixels_y",
+                "5_000",
+                "--max_iterations",
+                "50"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Numba (Huge)",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "args": [
+                "numba",
+                "--pixels_x",
+                "30_000",
+                "--pixels_y",
+                "10_000",
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
         }
     ]
 }

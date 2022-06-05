@@ -2,6 +2,8 @@ black
 isort
 loguru
 matplotlib
+numba
 numpy
 pre-commit
 pylint
+tqdm
